@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @Validated
-@RequestMapping("api/")
+@RequestMapping("api")
 public class FlightApi {
 
     private final FlightService flightService;
@@ -33,5 +33,9 @@ public class FlightApi {
             message = "Please enter valid destination") String destination, @PathVariable @NotNull LocalDate date) {
 
         return new ResponseEntity<>(flightService.searchFlights(source, destination, date), HttpStatus.OK) ;
+    }
+    @GetMapping("/greet")
+    public String check(){
+        return "Welcome to UnitedGo API";
     }
 }

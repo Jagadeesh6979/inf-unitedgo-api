@@ -4,7 +4,11 @@ import com.unitedGo.model.ErrorInfo;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -58,5 +62,27 @@ public class RestExceptionHandler{
         return new ResponseEntity<>(errorInfo, HttpStatus.BAD_REQUEST);
     }
 
+//    @ExceptionHandler(UsernameNotFoundException.class)
+//    public ResponseEntity<ErrorInfo> httpExceptionHandler(UsernameNotFoundException exception) {
+//        ErrorInfo errorInfo = new ErrorInfo();
+//        errorInfo.setErrorCode(404);
+//        errorInfo.setErrorMessage(exception.getMessage());
+//        errorInfo.setTimestamp(LocalDateTime.now());
+//        return new ResponseEntity<>(errorInfo, HttpStatus.NOT_FOUND);
+//    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ProblemDetail handleBadCredentialsException(BadCredentialsException exception) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
+        problemDetail.setProperty("access_denied_reason", "Authentication failed");
+        return problemDetail;
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ProblemDetail handleAccessDeniedException(AccessDeniedException exception) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, exception.getMessage());
+        problemDetail.setProperty("access_denied_reason", "Authorization failed");
+        return problemDetail;
+    }
 
 }
