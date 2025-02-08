@@ -3,7 +3,6 @@ package com.unitedGo.security;
 import com.unitedGo.entity.UserPrincipal;
 import com.unitedGo.entity.Users;
 import com.unitedGo.repository.UserRepository;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
